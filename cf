@@ -1,0 +1,33 @@
+Resources:
+  EC2instance1213:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      AvailabilityZone: ap-south-1b
+      InstanceType: t2.micro
+      ImageId: ami-07ffb2f4d65357b42
+      UserData:
+       Fn::Base64:!Sub|
+          #!/bin/bash
+          sudo apt-get update -y
+          sleep 20
+          sudo apt-get install httpd -y
+          sleep 20
+          sudo cd /var/www/html/ 
+          systemctl start httpd.service
+          sudo apt-get install git maven -y
+          sleep 20
+          sudo apt-get install openjdk-11-jdk -y
+          sleep 30
+          wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+          sleep 30
+          java -jar jenkins.war
+          sleep 40
+          sudo su
+          lsof -i tcp:81
+          sudo amazon-linux-extras install nginx1 -y
+          sleep 20
+          service nginx start
+          sudo apt install mysql-server
+          sleep 20
+          sudo systemctl start mysql.service
+          sudo apt install apache2
